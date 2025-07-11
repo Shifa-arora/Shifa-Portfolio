@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numa Devware | Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.0/dist/vanilla-tilt.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #0a0a0a;
+            --secondary-color: #1a1a1a;
+            --accent-color: #0066ff;
+            --text-color: #f5f5f5;
+            --light-text: #aaa;
+            --section-padding: 8rem 0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            background-color: rgba(10, 10, 10, 0.9);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo i {
+            font-size: 1.5rem;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        nav a:hover {
+            color: var(--accent-color);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-color);
+            transition: width 0.3s;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        .hamburger div {
+            width: 25px;
+            height: 2px;
+            background-color: var(--text-color);
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        section {
+            padding: var(--section-padding);
+            position: relative;
+        }
+        
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #fff, var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards 0.5s;
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            color: var(--light-text);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards 0.8s;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards 1.1s;
+        }
+        
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 4px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: white;
+            border: 2px solid var(--accent-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--accent-color);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--text-color);
+            border: 2px solid var(--text-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--text-color);
+            color: var(--primary-color);
+        }
+        
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
+            margin: 2rem 0;
+            width: 100%;
+        }
+        
+        .section-title {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: var(--text-color);
+            position: relative;
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50%;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+        
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .about-content {
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: fadeInLeft 1s ease forwards 0.5s;
+        }
+        
+        .about-content h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+        }
+        
+        .about-content p {
+            margin-bottom: 1.5rem;
+            color: var(--light-text);
+            line-height: 1.8;
+        }
+        
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+        }
+        
+        .skill {
+            background-color: var(--secondary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .skill:hover {
+            background-color: var(--accent-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .about-image {
+            position: relative;
+            opacity: 0;
+            transform: translateX(20px);
+            animation: fadeInRight 1s ease forwards 0.5s;
+        }
+        
+        .about-image img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .experience-item {
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards;
+        }
+        
+        .experience-item h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .experience-item h4 {
+            font-size: 1.2rem;
+            color: var(--light-text);
+            margin-bottom: 0.5rem;
+        }
+        
+        .experience-item .date {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            display: block;
+            font-weight: 500;
+        }
+        
+        .experience-item ul {
+            margin-left: 1.5rem;
+            color: var(--light-text);
+        }
+        
+        .experience-item li {
+            margin-bottom: 0.5rem;
+            line-height: 1.8;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .project-card {
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .project-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .project-card:hover .project-image img {
+            transform: scale(1.1);
+        }
+        
+        .project-content {
+            padding: 1.5rem;
+        }
+        
+        .project-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .project-content p {
+            color: var(--light-text);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .project-tag {
+            background-color: rgba(0, 102, 255, 0.1);
+            color: var(--accent-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .project-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        
+        .project-link:hover {
+            color: var(--accent-color);
+        }
+        
+        .certificates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .certificate-card {
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .certificate-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .certificate-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .certificate-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .certificate-content {
+            padding: 1.5rem;
+        }
+        
+        .certificate-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .certificate-content p {
+            color: var(--light-text);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .certificate-issuer {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .testimonial-card {
+            background-color: var(--secondary-color);
+            padding: 2rem;
+            border-radius: 10px;
+            position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 1rem;
+            left: 1.5rem;
+            font-size: 5rem;
+            color: rgba(255, 255, 255, 0.05);
+            font-family: serif;
+            line-height: 1;
+        }
+        
+        .testimonial-card p {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .testimonial-author img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .author-info .name {
+            font-weight: bold;
+        }
+        
+        .author-info .position {
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+        
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--secondary-color);
+            border: none;
+            border-radius: 5px;
+            color: var(--text-color);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--accent-color);
+        }
+        
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background-color: #0052cc;
+            transform: translateY(-3px);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        .social-link {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .social-link:hover {
+            color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            background-color: var(--secondary-color);
+            color: var(--light-text);
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 999;
+            box-shadow: 0 5px 15px rgba(0, 102, 255, 0.3);
+        }
+        
+        .back-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 102, 255, 0.4);
+        }
+        
+        /* 3D Scene Container */
+        .scene-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.2;
+        }
+        
+        /* Section Transition */
+        .section-transition {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .transition-title {
+            font-size: 5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            opacity: 0;
+            transform: scale(0.8);
+            text-align: center;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .about-image {
+                order: -1;
+                margin-bottom: 2rem;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background-color: var(--secondary-color);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: all 0.5s ease;
+                z-index: 1000;
+            }
+            
+            nav.active {
+                right: 0;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 2rem;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .hamburger.active div:nth-child(1) {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+            
+            .hamburger.active div:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .hamburger.active div:nth-child(3) {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+                padding: 0 1rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .transition-title {
+                font-size: 3rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .projects-grid,
+            .certificates-grid,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section {
+                padding: 5rem 0;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .transition-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <i class="fas fa-code"></i>
+            <span>Shifa-Portfolio</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#work">Work</a></li>
+                <li><a href="#certificates">Certificates</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="hamburger">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="scene-container" id="hero-scene"></div>
+        <h1>Hi, I'm Shifa!</h1>
+        <p>I develop modern user interfaces and web applications. Let's work together to bring your ideas to life!</p>
+        <div class="hero-buttons">
+            <a href="#work" class="btn btn-primary">View My Work</a>
+            <a href="#contact" class="btn btn-outline">Contact Me</a>
+        </div>
+        <div class="scroll-down">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Section Transition -->
+    <div class="section-transition">
+        <div class="scene-container" id="transition1-scene"></div>
+        <h2 class="transition-title">About Me</h2>
+    </div>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title">About</h2>
+            <div class="about-grid">
+                <!-- <div class="about-content"> -->
+                    <!-- <h3>Full-Stack Developer</h3>
+                    <p>With expertise in both frontend and backend development, I create seamless digital experiences that users love. My approach combines technical excellence with thoughtful design.</p>
+                    <p>Work, family purpose, or ability to strengthen individuals on social opportunities that are common in relation to mobility. In active complex problems, work with different technologies, and manage projects efficiently.</p>
+                    <div class="skills">
+                        <span class="skill">JavaScript</span>
+                        <span class="skill">React</span>
+                        <span class="skill">Node.js</span>
+                        <span class="skill">TypeScript</span>
+                        <span class="skill">HTML/CSS</span>
+                        <span class="skill">MongoDB</span>
+                        <span class="skill">Three.js</span>
+                        <span class="skill">UI/UX</span>
+                    </div>
+                </div> -->
+                <div class="about-image" data-tilt data-tilt-scale="1.05" data-tilt-glare data-tilt-max-glare="0.2">
+                    <img src="https://images.unsplash.com/photo-1579403124614-197f69d8187b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80" alt="Developer working">
+                </div>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <h3 class="section-title" style="font-size: 2.5rem; margin-bottom: 2rem;">Experience</h3>
+            <div class="experience-item" style="animation-delay: 0.2s">
+                <h3>Full-Stack Developer</h3>
+                <h4>Telekey</h4>
+                <span class="date">Jan 2023 – Present</span>
+                <ul>
+                    <li>Developing and monitoring web applications using virtual technologies.</li>
+                    <li>Collaborating with start-to-release teams including designers, product managers, and product experts to create high-quality products.</li>
+                    <li>Implementing responsive design and ensuring cross-browser compatibility.</li>
+                    <li>Participating in code reviews and providing constructive feedback to other developers.</li>
+                </ul>
+            </div>
+            <div class="experience-item" style="animation-delay: 0.4s">
+                <h3>Frontend Developer</h3>
+                <h4>KGI Companies</h4>
+                <span class="date">Mar 2021 – Dec 2022</span>
+                <ul>
+                    <li>Built responsive user interfaces with React and TypeScript.</li>
+                    <li>Optimized web applications for performance and accessibility.</li>
+                    <li>Worked closely with design teams to implement pixel-perfect UIs.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Transition -->
+    <div class="section-transition">
+        <div class="scene-container" id="transition2-scene"></div>
+        <h2 class="transition-title">My Work</h2>
+    </div>
+
+    <!-- Work Section -->
+    <section id="work" class="section">
+        <div class="container">
+            <h2 class="section-title">Work</h2>
+            <div class="projects-grid">
+                <div class="project-card" style="animation-delay: 0.1s">
+                    <div class="project-image">
+                        <img src="https://up.yimg.com/ib/th/id/OIP.Qq8IC6l8wGL9DX3oxqtClwHaD5?pid=Api&rs=1&c=1&qlt=95&w=214&h=112" alt="Tasklisty Martt">
+                    </div>
+                    <div class="project-content">
+                        <h3>Health Management System</h3>
+                        <p>A healthcare management system (HMS) is a unified solution that centralises various administrative, financial and clinical functionalities.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">HTML</span>
+                            <span class="project-tag">CSS</span>
+                            <span class="project-tag">Java Script</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="file:///C:/Users/91953/OneDrive/Desktop/Dynamic-Developers-main/Dynamic-Developers-main/index.html" class="project-link"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                            <a href="https://github.com/Tanushwi/Dynamic-Developers" class="project-link"><i class="fab fa-github"></i> Code</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card" style="animation-delay: 0.3s">
+                    <div class="project-image">
+                        <img src="https://tse2.mm.bing.net/th/id/OIP.eTeaWs3aSjHBRcz3fKDV5QHaHa?pid=Api&P=0&h=180" alt="GearXport">
+                    </div>
+                    <div class="project-content">
+                        <h3>Zenith-Hire</h3>
+                        <p>Zenith hire
+                            
+                            
+                            
+                            is transforming the way businesses hire by providing a seamless and efficient hiring process.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">HTML</span>
+                            <span class="project-tag">CSS</span>
+                            <span class="project-tag">Java Script</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="file:///C:/Users/91953/OneDrive/Desktop/Zenith_Hire-main/Zenith_Hire-main/templates/new_final/index.html" class="project-link"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                            <a href="https://github.com/Shifa-arora/Zenith_Hire" class="project-link"><i class="fab fa-github"></i> Code</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="project-card" style="animation-delay: 0.5s">
+                    <div class="project-image">
+                        <img src="https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Godroove-Ecommerce">
+                    </div>
+                    <div class="project-content">
+                        <h3>Godroove-Ecommerce</h3>
+                        <p>A non-circular environment for premium product owners without degrading quality.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">Next.js</span>
+                            <span class="project-tag">Stripe</span>
+                            <span class="project-tag">Tailwind CSS</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                            <a href="#" class="project-link"><i class="fab fa-github"></i> Code</a>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Transition -->
+    <div class="section-transition">
+        <div class="scene-container" id="transition3-scene"></div>
+        <h2 class="transition-title">Certificates</h2>
+    </div>
+
+    <!-- Certificates Section -->
+    <section id="certificates" class="section">
+        <div class="container">
+            <h2 class="section-title">Certificates</h2>
+            <div class="certificates-grid">
+                <div class="certificate-card" style="animation-delay: 0.1s">
+                    <div class="certificate-image">
+                        <img src="https://coursera.org/verify/CDJKN67TZY2A" alt="AI and Disaster Management">
+                    </div>
+                    <div class="certificate-content">
+                        <h3> AI and Disaster Management</h3>
+                        <p> an online non-credit course authorized by DeepLearning.AI and offered through Coursera.</p>
+                        <p>Issued: May 2023</p>
+                        <div class="certificate-issuer">
+                            <i class="fas fa-award"></i>
+                            <span>Coursera</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="certificate-card" style="animation-delay: 0.3s">
+                    <div class="certificate-image">
+                        <img src="coursera.org/verify/PEJU853X63GO " alt=" Decision Making and Governance of Natural Disaster Risk">
+                    </div>
+                    <div class="certificate-content">
+                        <h3> Decision Making and Governance of Natural Disaster Risk</h3>
+                        <p> an online non-credit course authorized by Banco Interamericano de Desarrollo and offered through Coursera.</p>
+                        <p>Issued: March 2023</p>
+                        <div class="certificate-issuer">
+                            <i class="fas fa-award"></i>
+                            <span>BID</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="certificate-card" style="animation-delay: 0.5s">
+                    <div class="certificate-image">
+                        <img src="file:///c%3A/Users/91953/OneDrive/Desktop/Shifa-Portfolio-main/portfolio/f66cec1b-6b8c-494e-9955-b6b646ef5e14.png" alt="Cloud Architecture Certificate">
+                    </div>
+                    <div class="certificate-content">
+                        <h3>WebCrafters 2.0: Skill Development in Collaborative coding</h3>
+                        <p>Learned to design and implement scalable cloud solutions using AWS and Azure platforms.</p>
+                        <p>Issued: January 2023</p>
+                        <div class="certificate-issuer">
+                            <i class="fas fa-award"></i>
+                            <span>Geeks for Geeks</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="certificate-card" style="animation-delay: 0.5s">
+                    <div class="certificate-image">
+                        <img src="https://coursera.org/verify/KW9H1YPZXEPZ" alt="Interpersonal Communication for Engineering Leaders">
+                    </div>
+                    <div class="certificate-content">
+                        <h3>Interpersonal Communication for Engineering Leaders</h3>
+                        <p> an online non-credit course authorized by Rice University and offered through Coursera.</p>
+                        <p>Issued: January 2023</p>
+                        <div class="certificate-issuer">
+                            <i class="fas fa-award"></i>
+                            <span>Rice University</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="certificate-card" style="animation-delay: 0.5s">
+                    <div class="certificate-image">
+                        <img src="file:///c%3A/Users/91953/OneDrive/Desktop/Shifa-Portfolio-main/portfolio/Introduction_to_Cybersecurity_certificate_shifa1672-becse24-chitkara-edu-in_2de3ae45-e75d-45e6-8699-1bc7734249df.pdf" alt="Cloud Architecture Certificate">
+                    </div>
+                    <div class="certificate-content">
+                        <h3> Introduction to Cybersecurity</h3>
+                        <p>Learned to design and implement scalable cloud solutions using AWS and Azure platforms.</p>
+                        <p>Issued: January 2025</p>
+                        <div class="certificate-issuer">
+                            <i class="fas fa-award"></i>
+                            <span>Cisco</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="certificate-card" style="animation-delay: 0.5s">
+                    <div class="certificate-image">
+                        <img src="file:///c%3A/Users/91953/OneDrive/Desktop/Shifa-Portfolio-main/portfolio/Natural%20Disaster%20and%20Climate%20Change%20Risk%20Assessment.pdf" alt="Cloud Architecture Certificate">
+                    </div>
+                    <div class="certificate-content">
+                        <h3>Cloud Architecture Fundamentals</h3>
+                        <p>Learned to design and implement scalable cloud solutions using AWS and Azure platforms.</p>
+                        <p>Issued: January 2023</p>
+                        <div class="certificate-issuer">
+                            <i class="fas fa-award"></i>
+                            <span>Cloud Academy</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="certificate-card" style="animation-delay: 0.5s">
+                    <div class="certificate-image">
+                        <img src="file:///c%3A/Users/91953/OneDrive/Desktop/Shifa-Portfolio-main/portfolio/Natural%20Disaster%20Risk%20in%20Infrastructure%20Projects.pdf" alt="Cloud Architecture Certificate">
+                    </div>
+                    <div class="certificate-content">
+                        <h3>Cloud Architecture Fundamentals</h3>
+                        <p>Learned to design and implement scalable cloud solutions using AWS and Azure platforms.</p>
+                        <p>Issued: January 2023</p>
+                        <div class="certificate-issuer">
+                            <i class="fas fa-award"></i>
+                            <span>Cloud Academy</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="certificate-card" style="animation-delay: 0.5s">
+                    <div class="certificate-image">
+                        <img src="file:///c%3A/Users/91953/OneDrive/Desktop/Shifa-Portfolio-main/portfolio/Oral%20Communication%20for%20Engineering%20Leaders.pdf" alt="Cloud Architecture Certificate">
+                    </div>
+                    <div class="certificate-content">
+                        <h3>Cloud Architecture Fundamentals</h3>
+                        <p>Learned to design and implement scalable cloud solutions using AWS and Azure platforms.</p>
+                        <p>Issued: January 2023</p>
+                        <div class="certificate-issuer">
+                            <i class="fas fa-award"></i>
+                            <span>Cloud Academy</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="certificate-card" style="animation-delay: 0.5s">
+                    <div class="certificate-image">
+                        <img src="file:///c%3A/Users/91953/OneDrive/Desktop/Shifa-Portfolio-main/portfolio/overall_personality_coursera.pdf" alt="Cloud Architecture Certificate">
+                    </div>
+                    <div class="certificate-content">
+                        <h3>Cloud Architecture Fundamentals</h3>
+                        <p>Learned to design and implement scalable cloud solutions using AWS and Azure platforms.</p>
+                        <p>Issued: January 2023</p>
+                        <div class="certificate-issuer">
+                            <i class="fas fa-award"></i>
+                            <span>Cloud Academy</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="certificate-card" style="animation-delay: 0.5s">
+                    <div class="certificate-image">
+                        <img src="file:///c%3A/Users/91953/OneDrive/Desktop/Shifa-Portfolio-main/portfolio/Qualitative%20and%20Quantative%20Analysis%20of%20Disaster.pdf" alt="Cloud Architecture Certificate">
+                    </div>
+                    <div class="certificate-content">
+                        <h3>Cloud Architecture Fundamentals</h3>
+                        <p>Learned to design and implement scalable cloud solutions using AWS and Azure platforms.</p>
+                        <p>Issued: January 2023</p>
+                        <div class="certificate-issuer">
+                            <i class="fas fa-award"></i>
+                            <span>Cloud Academy</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="certificate-card" style="animation-delay: 0.5s">
+                    <div class="certificate-image">
+                        <img src="file:///c%3A/Users/91953/OneDrive/Desktop/Shifa-Portfolio-main/portfolio/Writing%20skills%20for%20engineering%20leaders.pdf" alt="Cloud Architecture Certificate">
+                    </div>
+                    <div class="certificate-content">
+                        <h3>Cloud Architecture Fundamentals</h3>
+                        <p>Learned to design and implement scalable cloud solutions using AWS and Azure platforms.</p>
+                        <p>Issued: January 2023</p>
+                        <div class="certificate-issuer">
+                            <i class="fas fa-award"></i>
+                            <span>Cloud Academy</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Transition -->
+    <div class="section-transition">
+        <div class="scene-container" id="transition4-scene"></div>
+        <h2 class="transition-title">Testimonials</h2>
+    </div>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="section">
+        <div class="container">
+            <h2 class="section-title">What Others Say</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card" style="animation-delay: 0.1s">
+                    <p>"Proved me wrong with exceptional project management skills and technical expertise that transformed our education platform's user experience."</p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Job Management">
+                        <div class="author-info">
+                            <div class="name">Job Management</div>
+                            <div class="position">Government of Education</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card" style="animation-delay: 0.3s">
+                    <p>"Nurali does outstanding work with global business solutions. His ability to understand complex requirements and deliver beyond expectations is remarkable."</p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Global Behaviour">
+                        <div class="author-info">
+                            <div class="name">Global Behaviour</div>
+                            <div class="position">Government Business of Industry</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card" style="animation-delay: 0.5s">
+                    <p>"More than enough talent and expertise for any project! Nurali's work on our e-commerce platform increased conversions by 40% and reduced load times significantly."</p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Jordan Wang">
+                        <div class="author-info">
+                            <div class="name">Jordan Wang</div>
+                            <div class="position">CEO of KGI Companies</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Transition -->
+    <div class="section-transition">
+        <div class="scene-container" id="transition5-scene"></div>
+        <h2 class="transition-title">Get In Touch</h2>
+    </div>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <div class="container">
+            <h2 class="section-title">Contact</h2>
+            <div class="contact-form">
+                <div class="form-group" style="animation-delay: 0.1s">
+                    <label for="name">Your Name</label>
+                    <input type="text" id="name" placeholder="What's your good name?">
+                </div>
+                <div class="form-group" style="animation-delay: 0.2s">
+                    <label for="email">Your Email</label>
+                    <input type="email" id="email" placeholder="What's your web address?">
+                </div>
+                <div class="form-group" style="animation-delay: 0.3s">
+                    <label for="message">Your Message</label>
+                    <textarea id="message" placeholder="What do you want to say?"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i> Send Message
+                </button>
+            </div>
+            <div class="social-links">
+                <a href="https://github.com/Shifa-arora" class="social-link"><i class="fab fa-github"></i></a>
+                <a href="https://www.linkedin.com/in/shifa-a31571324/" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.instagram.com/shifa_arora__/" class="social-link"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-dribbble"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Shifa-Portfolio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script>
+        // Mobile Navigation
+        const hamburger = document.querySelector('.hamburger');
+        const nav = document.querySelector('nav');
+        
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            nav.classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                nav.classList.remove('active');
+            });
+        });
+        
+        // Back to Top Button
+        const backToTopBtn = document.querySelector('.back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('active');
+            } else {
+                backToTopBtn.classList.remove('active');
+            }
+        });
+        
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Initialize tilt.js on elements
+        VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
+            max: 15,
+            speed: 400,
+            glare: true,
+            "max-glare": 0.2,
+        });
+        
+        // Animate elements when they come into view
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.section-title, .experience-item, .project-card, .certificate-card, .testimonial-card, .form-group');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementPosition < windowHeight - 100) {
+                    const animation = element.style.animation;
+                    if (!animation || animation === 'none') {
+                        const delay = element.getAttribute('style')?.includes('animation-delay') ? 
+                            element.style.animationDelay : '0s';
+                        element.style.animation = `fadeInUp 1s ease ${delay} forwards`;
+                    }
+                }
+            });
+        };
+        
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+        
+        // Initialize 3D scenes
+        const init3DScene = (containerId) => {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+            
+            // Create geometry based on the container
+            let geometry;
+            if (containerId === 'hero-scene') {
+                geometry = new THREE.TorusGeometry(1, 0.4, 16, 100);
+            } else if (containerId.includes('transition')) {
+                geometry = new THREE.IcosahedronGeometry(1, 0);
+            } else {
+                geometry = new THREE.OctahedronGeometry(1, 0);
+            }
+            
+            const material = new THREE.MeshStandardMaterial({ 
+                color: 0x0066ff,
+                metalness: 0.7,
+                roughness: 0.2
+            });
+            const mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+            
+            // Add lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(1, 1, 1);
+            scene.add(directionalLight);
+            
+            camera.position.z = containerId.includes('transition') ? 3 : 5;
+            
+            // Animation
+            const animate = () => {
+                requestAnimationFrame(animate);
+                
+                mesh.rotation.x += 0.005;
+                mesh.rotation.y += 0.01;
+                
+                if (containerId === 'hero-scene') {
+                    mesh.rotation.z += 0.005;
+                }
+                
+                renderer.render(scene, camera);
+            };
+            
+            // Handle resize
+            const handleResize = () => {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            };
+            
+            window.addEventListener('resize', handleResize);
+            
+            animate();
+        };
+        
+        // Initialize all 3D scenes
+        document.addEventListener('DOMContentLoaded', () => {
+            init3DScene('hero-scene');
+            init3DScene('transition1-scene');
+            init3DScene('transition2-scene');
+            init3DScene('transition3-scene');
+            init3DScene('transition4-scene');
+            init3DScene('transition5-scene');
+            
+            // Animate transition titles
+            const transitionTitles = document.querySelectorAll('.transition-title');
+            transitionTitles.forEach((title, index) => {
+                setTimeout(() => {
+                    title.style.opacity = '1';
+                    title.style.transform = 'scale(1)';
+                }, 500 + index * 100);
+            });
+        });
+    </script>
+</body>
+</html>
